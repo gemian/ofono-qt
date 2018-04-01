@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+
+export QT_SELECT=qt5
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PKG_version     := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
+PKG_source      := $(shell dpkg-parsechangelog | sed -n 's/^Source: //p')
+UPS_version     := $(shell echo '$(PKG_version)' | sed 's/.*://; s/-[^-]*$$//')
+GIT_rev         := $(shell echo '$(UPS_version)' | sed 's/.*+//')
+
+# --remote doesn't work with github so this needs to be run from a local checkout
+get-orig-source:
+	rm -rf $(PKG_source)-$(UPS_version)
+	rm -f $(PKG_source)-$(UPS_version).orig.tar.gz
+	git clone git://gitorious.org/meego-cellular/ofono-qt.git $(PKG_source)-$(UPS_version)
+	cd $(PKG_source)-$(UPS_version) && git archive \
+		--format tar \
+		--prefix $(PKG_source)-$(UPS_version)/ \
+		$(GIT_rev) \
+		| gzip >../$(PKG_source)_$(UPS_version).orig.tar.gz
+	rm -rf $(PKG_source)-$(UPS_version)
+
+override_dh_auto_test:
+
+%:
+	dh $@ --with quilt
