@@ -1,7 +1,7 @@
 Source: ofono-qt
 Priority: optional
 Maintainer: Adam Boardman <adamboardman@gmail.com>
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 Build-Depends: debhelper (>= 9.0.0),
                doxygen,
                quilt,
